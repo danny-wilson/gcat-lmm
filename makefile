@@ -9,7 +9,7 @@
 #
 
 # Header file locations for gcat-project
-INCLUDE = -I/usr/include/gcat
+INCLUDE = -I/usr/include/gcat -I./src
 # C++ compiler
 CC = g++
 # C++ compiler for MPICH2
