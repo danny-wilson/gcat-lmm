@@ -6,7 +6,7 @@ LABEL build-type="From source"
 ENV MKDIR /tmp/libgcat_lmm
 RUN mkdir $MKDIR
 COPY . $MKDIR
-WORDIR $MKDIR
+WORKDIR $MKDIR
 RUN make
 RUN mv lib* /usr/lib/
 RUN mv src/* /usr/include/gcat/
