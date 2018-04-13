@@ -1,11 +1,11 @@
 <?xml version="1.1"?>
 <gcat xmlns="http://www.danielwilson.me.uk/gcat">
 	<libraries>
-		<library file="/Users/wilson/Documents/C++/gcat/private/libgcat_lmm.so"/>
+		<library file="libgcat_lmm.so"/>
 	</libraries>
 	
 	<data>
-		<continuous_matrix_file id="bip" file="/Users/wilson/Documents/C++/gcat/private/examples/mat.txt"/>
+		<continuous_matrix_file id="bip" file="mat.txt"/>
 		<continuous_vector id="LT">
 			1 0 1 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
 			0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0
@@ -24,7 +24,7 @@
 			-1.16535082 -2.49514939 -3.24864938 -3.34840736 -0.14399954 -2.83951780 -0.07706030 -0.49269501 -1.54011281 -2.40843062 -4.97913911 -3.01102505 -3.75886756 -0.20660744
 			-1.84356892 -0.07712514
 		</iid_continuous_scalar>
-<!--		<continuous_vector_file id="Y" distribution="Y~" file="/Users/wilson/Documents/C++/gcat/private/examples/vec.txt"/>
+<!--		<continuous_vector_file id="Y" distribution="Y~" file="vec.txt"/>
 -->
 		<continuous_vector id="mu">
 			1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1

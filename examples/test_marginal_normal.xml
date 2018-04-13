@@ -1,11 +1,11 @@
 <?xml version="1.1"?>
 <gcat xmlns="http://www.danielwilson.me.uk/gcat">
 	<libraries>
-		<library file="/Users/wilson/Documents/C++/gcat/private/libgcat_lmm.so"/>
+		<library file="libgcat_lmm.so"/>
 	</libraries>
 	
 	<data>
-		<continuous_matrix_file id="bip" file="/Users/wilson/Documents/C++/gcat/private/examples/mat.txt"/>
+		<continuous_matrix_file id="bip" file="mat.txt"/>
 		<continuous_vector id="LT">
 			1 0 1 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
 			0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0
@@ -40,7 +40,7 @@
 	<mcmc niter="100" seed="-1255892792" screen_update="1">
 		<uniform_proposal parameter="X" half-width="1.0" weight="1"/>
 		
-		<log burnin="0" thinning="20" file="test.mcmc.txt">
+		<log burnin="0" thinning="20" file="test.mn.mcmc.txt">
 			<parameter idref="X"/>
 <!--			<parameter idref="Sigma"/> -->
 			<loglikelihood idref="Y"/>

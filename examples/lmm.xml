@@ -2,14 +2,12 @@
 <!-- Bayesian LMM model -->
 <gcat xmlns="http://www.danielwilson.me.uk/gcat">
 	<libraries>
-		<library file="/Users/wilson/Documents/C++/gcat/private/libgcat_lmm.so"/>
+		<library file="libgcat_lmm.so"/>
 	</libraries>
 	
 	<data>
-<!--    <continuous_vector_file id="pheno" distribution="pheno~" file="/Volumes/platypus/dipro/mmm/gorm/v2/ana/Saur/AbxGWAS/der.cipro.txt"/>
-		<continuous_matrix_file id="geno" file="/Volumes/platypus/dipro/mmm/gorm/v2/ana/Saur/AbxGWAS/der.geno.gcatlmm.txt"/> -->
-        <continuous_vector_file id="pheno" distribution="pheno~" file="/Users/wilson/Downloads/der.cipro.txt"/>
-		<continuous_matrix_file id="geno" file="/Users/wilson/Downloads/der.geno2.gcatlmm.txt"/>
+        <continuous_vector_file id="pheno" distribution="pheno~" file="der.cipro.txt"/>
+		<continuous_matrix_file id="geno" file="der.geno2.gcatlmm.txt"/>
 	</data>
 	
 	<parameters>
@@ -51,7 +49,7 @@
 		<log_uniform_proposal parameter="ssq_A" half-width="0.5" weight="1"/>
 		<log_uniform_proposal parameter="ssq_E" half-width="0.5" weight="1"/>
 		
-		<log burnin="0" thinning="20" file="lmm.mcmc.txt">
+		<log burnin="0" thinning="20" file="lmm.eg.mcmc.txt">
 			<parameter idref="m"/>
 			<parameter idref="ssq_A"/>
 			<parameter idref="ssq_E"/>

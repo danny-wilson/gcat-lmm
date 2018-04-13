@@ -2,15 +2,15 @@
 <!-- Bayesian LMM model -->
 <gcat xmlns="http://www.danielwilson.me.uk/gcat">
 	<libraries>
-		<library file="/Users/wilson/Documents/C++/gcat/private/libgcat_lmm.so"/>
+		<library file="libgcat_lmm.so"/>
 	</libraries>
 	
 	<data>
 <!--		<continuous_vector id="p" length="11">
 		  1.784379E-59 8.612162E-02 9.694771E-02 1.002889E-01 1.013608E-01 1.020324E-01 1.023562E-01 1.025819E-01 1.027469E-01 1.027817E-01 1.027817E-01
 		</continuous_vector> -->
-                <continuous_vector_file id="pheno" distribution="pheno~" file="/Users/wilson/Downloads/der.cipro.txt"/>
-                <continuous_matrix_file id="geno" file="/Users/wilson/Downloads/der.geno.gcatlmm.txt"/>
+                <continuous_vector_file id="pheno" distribution="pheno~" file="der.cipro.txt"/>
+                <continuous_matrix_file id="geno" file="der.geno.gcatlmm.txt"/>
 	</data>
 	
 	<parameters>
@@ -21,7 +21,7 @@
 	<transformations>
         <!-- Process the genotypes -->
         <!-- R code:
-                a = read.delim("/dipro/mmm/ana/Saur/AbxGWAS/output/der.lmm.out-maf0.assoc.txt",as.is=T)
+                a = read.delim("der.lmm.out-maf0.assoc.txt",as.is=T)
                 match(quantile(log10(a$p_lrt),seq(0,1,len=10),type=1),log10(a$p_lrt))-1
                 -log10(a$p_lrt[match(quantile(log10(a$p_lrt),seq(0,1,len=10),type=1),log10(a$p_lrt))])
                 #[1] 59.072544532  0.258037792  0.135220534  0.083742450  0.061740379
@@ -122,7 +122,7 @@
 		<log_uniform_proposal parameter="lambda" half-width="1" weight="1"/>
 		<log_uniform_proposal parameter="mu" half-width="1" weight="1"/>
 		
-		<log burnin="20" thinning="1" file="lmm2b.v4.mcmc.txt">
+		<log burnin="20" thinning="1" file="lmm.eg2b.mcmc.txt">
 			<parameter idref="lambda"/>
 			<parameter idref="mu"/>
 			<loglikelihood idref="pheno"/>
@@ -134,7 +134,7 @@
 	</mcmc>
     
     <!-- R code for importance sampling estimate of posterior model probabilities (need to check)
-        a=read.delim("~/Documents/C++/gcat/private/lmm2b.mcmc.txt",as.is=T)
+        a=read.delim("lmm.eg2b.mcmc.txt",as.is=T)
         pp = sapply(match(paste0("ll.",0:9),colnames(a)),function(j) mean(0.1*exp(a[,j]-a[,3])))
         #[1] 0.12859923 0.09747550 0.09747880 0.09747790 0.09741480 0.09747875 0.09167455 0.09746331 0.09747830 0.09745583
         plot(0.1*exp(a[,6]-a[,3]))
