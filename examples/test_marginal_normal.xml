@@ -34,7 +34,7 @@
         
 		<!-- Likelihood -->
 <!--		<marginal_normal_distribution id="Y~" length="Y" c="1.0" cov="Sigma"/> -->
-		<marginal_normal_distribution id="Y~" length="Y" c="1.0" cov="kin"/>
+		<marginal_normal_distribution id="Y~" length="Y" cov="kin"/>
 	</distributions>
 	
 	<mcmc niter="100" seed="-1255892792" screen_update="1">
