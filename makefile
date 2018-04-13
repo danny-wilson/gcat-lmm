@@ -9,7 +9,7 @@
 #
 
 # Header file locations for gcat-project
-INCLUDE = -Isrc -Isrc/myutils -I/usr/include/gcat
+INCLUDE = -Isrc -I/usr/include/gcat -I/usr/include/gcat/myutils
 # C++ compiler
 CC = g++
 # C++ compiler for MPICH2
