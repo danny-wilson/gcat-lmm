@@ -1,0 +1,127 @@
+<?xml version="1.1"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+elementFormDefault="qualified">
+
+	<!-- Distributions -->
+	<xs:element name="continuous_vector_mixture" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:string" use="required"/>
+					<xs:attribute name="length" type="xs:string" use="required"/>
+					<xs:attribute name="p" type="xs:string" default=""/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="marginal_normal_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="length" type="xs:string" use="required"/>
+			<xs:attribute name="cov" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="multivariate_normal_distribution" substitutionGroup="abstract_distribution">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="length" type="xs:string" use="required"/>
+			<xs:attribute name="mean" type="xs:string" use="required"/>
+			<xs:attribute name="cov" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Random Variables -->
+	<xs:element name="continuous_vector_file" substitutionGroup="abstract_parameter">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="distribution" type="xs:string" default=""/>
+			<xs:attribute name="file" type="xs:string" use="required"/>
+			<xs:attribute name="sep" type="xs:string" default=""/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="continuous_matrix_file" substitutionGroup="abstract_parameter">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="distribution" type="xs:string" default=""/>
+			<xs:attribute name="file" type="xs:string" use="required"/>
+			<xs:attribute name="sep" type="xs:string" default=""/>
+		</xs:complexType>
+	</xs:element>
+	
+	<!-- Transformations: Conversions -->
+	<xs:element name="to_diagonal_matrix" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="x" type="xs:string" use="required"/>
+			<xs:attribute name="length" type="xs:string" default=""/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="to_symmetric_matrix" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="x" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Transformations: Other -->
+	<xs:element name="centre_vector_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="x" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="compute_kinship_matrix" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+		<xs:attribute name="id" type="xs:string" use="required"/>
+		<xs:attribute name="bip" type="xs:string" use="required"/>
+		<xs:attribute name="position" type="xs:string" default=""/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="continuous_vector_mixture_component_loglikelihood" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="distribution" type="xs:string" use="required"/>
+			<xs:attribute name="rv" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="mean" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="x" type="xs:string" use="required"/>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="rescale_vector_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="scalar" type="xs:string" use="required"/>
+			<xs:attribute name="vector" type="xs:string" use="required"/>
+		</xs:complexType>
+	 </xs:element>
+
+	<xs:element name="rescale_symmetric_matrix_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:attribute name="id" type="xs:string" use="required"/>
+			<xs:attribute name="scalar" type="xs:string" use="required"/>
+			<xs:attribute name="matrix" type="xs:string" use="required"/>
+		</xs:complexType>
+	 </xs:element>
+
+	<xs:element name="symmetric_matrix_sum_transform" substitutionGroup="abstract_transformation">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="id" type="xs:string" use="required"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
+

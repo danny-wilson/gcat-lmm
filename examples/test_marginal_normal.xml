@@ -1,0 +1,49 @@
+<?xml version="1.1"?>
+<gcat xmlns="http://www.danielwilson.me.uk/gcat">
+	<libraries>
+		<library file="/Users/wilson/Documents/C++/gcat/private/libgcat_lmm.so"/>
+	</libraries>
+	
+	<data>
+		<continuous_matrix_file id="bip" file="/Users/wilson/Documents/C++/gcat/private/examples/mat.txt"/>
+		<continuous_vector id="LT">
+			1 0 1 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+			0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0
+			0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0
+			0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+			0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+			0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+		</continuous_vector>
+		<continuous_vector id="Y" distribution="Y~">
+			1 1 1 0 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+		</continuous_vector>
+	</data>
+	
+	<parameters>
+		<continuous_scalar id="X" distribution="X~" value="1.0"/>	
+	</parameters>
+	
+	<transformations>
+		<compute_kinship_matrix id="kin" bip="bip"/>
+		<to_symmetric_matrix id="Sigma" x="LT"/>
+    </transformations>
+    
+	<distributions>
+		<!-- Priors -->
+		<normal_distribution id="X~" mean="0.0" sd="1.0"/>
+        
+		<!-- Likelihood -->
+<!--		<marginal_normal_distribution id="Y~" length="Y" c="1.0" cov="Sigma"/> -->
+		<marginal_normal_distribution id="Y~" length="Y" c="1.0" cov="kin"/>
+	</distributions>
+	
+	<mcmc niter="100" seed="-1255892792" screen_update="1">
+		<uniform_proposal parameter="X" half-width="1.0" weight="1"/>
+		
+		<log burnin="0" thinning="20" file="test.mcmc.txt">
+			<parameter idref="X"/>
+<!--			<parameter idref="Sigma"/> -->
+			<loglikelihood idref="Y"/>
+		</log>
+	</mcmc>
+</gcat>

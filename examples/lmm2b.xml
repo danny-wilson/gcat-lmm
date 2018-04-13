@@ -1,0 +1,147 @@
+<?xml version="1.1"?>
+<!-- Bayesian LMM model -->
+<gcat xmlns="http://www.danielwilson.me.uk/gcat">
+	<libraries>
+		<library file="/Users/wilson/Documents/C++/gcat/private/libgcat_lmm.so"/>
+	</libraries>
+	
+	<data>
+<!--		<continuous_vector id="p" length="11">
+		  1.784379E-59 8.612162E-02 9.694771E-02 1.002889E-01 1.013608E-01 1.020324E-01 1.023562E-01 1.025819E-01 1.027469E-01 1.027817E-01 1.027817E-01
+		</continuous_vector> -->
+                <continuous_vector_file id="pheno" distribution="pheno~" file="/Users/wilson/Downloads/der.cipro.txt"/>
+                <continuous_matrix_file id="geno" file="/Users/wilson/Downloads/der.geno.gcatlmm.txt"/>
+	</data>
+	
+	<parameters>
+		<continuous_scalar id="lambda" distribution="lambda~" value="1.0"/>
+		<continuous_scalar id="mu" distribution="mu~" value="1.0"/>
+	</parameters>
+	
+	<transformations>
+        <!-- Process the genotypes -->
+        <!-- R code:
+                a = read.delim("/dipro/mmm/ana/Saur/AbxGWAS/output/der.lmm.out-maf0.assoc.txt",as.is=T)
+                match(quantile(log10(a$p_lrt),seq(0,1,len=10),type=1),log10(a$p_lrt))-1
+                -log10(a$p_lrt[match(quantile(log10(a$p_lrt),seq(0,1,len=10),type=1),log10(a$p_lrt))])
+                #[1] 59.072544532  0.258037792  0.135220534  0.083742450  0.061740379
+                #[6]  0.043968942  0.032721670  0.022157826  0.009109125  0.000000000
+				# Approximate posterior probabilities assuming uniform prior
+				pp = exp(0.5*qchisq(a$p_lrt,1,low=F))
+				tp = c(pp[match(quantile(log10(a$p_lrt),seq(0,1,len=10),type=1),log10(a$p_lrt))],1)
+				1/tp/sum(1/tp)
+        -->
+		<compute_kinship_matrix id="K" bip="geno"/>
+		<compute_kinship_matrix id="K0" bip="geno" position="336"/>
+		<compute_kinship_matrix id="K1" bip="geno" position="126113"/>
+		<compute_kinship_matrix id="K2" bip="geno" position="309"/>
+		<compute_kinship_matrix id="K3" bip="geno" position="694"/>
+		<compute_kinship_matrix id="K4" bip="geno" position="119109"/>
+		<compute_kinship_matrix id="K5" bip="geno" position="6"/>
+		<compute_kinship_matrix id="K6" bip="geno" position="24"/>
+		<compute_kinship_matrix id="K7" bip="geno" position="1016"/>
+		<compute_kinship_matrix id="K8" bip="geno" position="77"/>
+		<compute_kinship_matrix id="K9" bip="geno" position="166060"/>
+		
+        <product_transform id="mulambda">
+            mu lambda
+        </product_transform>
+        <!-- Construct covariance matrix -->
+		<rescale_symmetric_matrix_transform id="Sigma_A" scalar="lambda" matrix="K"/>
+		<rescale_symmetric_matrix_transform id="Sigma_B0" scalar="mulambda" matrix="K0"/>
+		<rescale_symmetric_matrix_transform id="Sigma_B1" scalar="mulambda" matrix="K1"/>
+		<rescale_symmetric_matrix_transform id="Sigma_B2" scalar="mulambda" matrix="K2"/>
+		<rescale_symmetric_matrix_transform id="Sigma_B3" scalar="mulambda" matrix="K3"/>
+		<rescale_symmetric_matrix_transform id="Sigma_B4" scalar="mulambda" matrix="K4"/>
+		<rescale_symmetric_matrix_transform id="Sigma_B5" scalar="mulambda" matrix="K5"/>
+		<rescale_symmetric_matrix_transform id="Sigma_B6" scalar="mulambda" matrix="K6"/>
+		<rescale_symmetric_matrix_transform id="Sigma_B7" scalar="mulambda" matrix="K7"/>
+		<rescale_symmetric_matrix_transform id="Sigma_B8" scalar="mulambda" matrix="K8"/>
+		<rescale_symmetric_matrix_transform id="Sigma_B9" scalar="mulambda" matrix="K9"/>
+		<to_diagonal_matrix id="Sigma_E" x="1.0" length="pheno"/>
+		<symmetric_matrix_sum_transform id="SigmaAE">
+			Sigma_A Sigma_E
+		</symmetric_matrix_sum_transform>
+		<symmetric_matrix_sum_transform id="Sigma0">
+			SigmaAE Sigma_B0
+		</symmetric_matrix_sum_transform>
+		<symmetric_matrix_sum_transform id="Sigma1">
+			SigmaAE Sigma_B1
+		</symmetric_matrix_sum_transform>
+		<symmetric_matrix_sum_transform id="Sigma2">
+			SigmaAE Sigma_B2
+		</symmetric_matrix_sum_transform>
+		<symmetric_matrix_sum_transform id="Sigma3">
+			SigmaAE Sigma_B3
+		</symmetric_matrix_sum_transform>
+		<symmetric_matrix_sum_transform id="Sigma4">
+			SigmaAE Sigma_B4
+		</symmetric_matrix_sum_transform>
+		<symmetric_matrix_sum_transform id="Sigma5">
+			SigmaAE Sigma_B5
+		</symmetric_matrix_sum_transform>
+		<symmetric_matrix_sum_transform id="Sigma6">
+			SigmaAE Sigma_B6
+		</symmetric_matrix_sum_transform>
+		<symmetric_matrix_sum_transform id="Sigma7">
+			SigmaAE Sigma_B7
+		</symmetric_matrix_sum_transform>
+		<symmetric_matrix_sum_transform id="Sigma8">
+			SigmaAE Sigma_B8
+		</symmetric_matrix_sum_transform>
+		<symmetric_matrix_sum_transform id="Sigma9">
+			SigmaAE Sigma_B9
+		</symmetric_matrix_sum_transform>
+        
+        <continuous_vector_mixture_component_loglikelihood id="ll." distribution="pheno~" rv="pheno"/>
+	</transformations>
+    
+	<distributions>
+		<!-- Priors -->
+		<uniform_distribution id="lambda~" min="0.00001" max="100000"/>
+		<log_normal_distribution id="mu~" mean="4.60517" sd="1"/>
+        
+		<!-- Likelihood -->
+		<marginal_normal_distribution id="phenoH0~" length="pheno" cov="SigmaAE"/>
+		<marginal_normal_distribution id="pheno0~" length="pheno" cov="Sigma0"/>
+		<marginal_normal_distribution id="pheno1~" length="pheno" cov="Sigma1"/>
+		<marginal_normal_distribution id="pheno2~" length="pheno" cov="Sigma2"/>
+		<marginal_normal_distribution id="pheno3~" length="pheno" cov="Sigma3"/>
+		<marginal_normal_distribution id="pheno4~" length="pheno" cov="Sigma4"/>
+		<marginal_normal_distribution id="pheno5~" length="pheno" cov="Sigma5"/>
+		<marginal_normal_distribution id="pheno6~" length="pheno" cov="Sigma6"/>
+		<marginal_normal_distribution id="pheno7~" length="pheno" cov="Sigma7"/>
+		<marginal_normal_distribution id="pheno8~" length="pheno" cov="Sigma8"/>
+		<marginal_normal_distribution id="pheno9~" length="pheno" cov="Sigma9"/>
+		<continuous_vector_mixture id="pheno~" length="pheno">
+			pheno0~ pheno1~ pheno2~ pheno3~ pheno4~ pheno5~ pheno6~ pheno7~ pheno8~ pheno9~ phenoH0~
+		</continuous_vector_mixture>
+	</distributions>
+	
+	<mcmc niter="20000" seed="-1255892792" screen_update="1">
+		<log_uniform_proposal parameter="lambda" half-width="1" weight="1"/>
+		<log_uniform_proposal parameter="mu" half-width="1" weight="1"/>
+		
+		<log burnin="20" thinning="1" file="lmm2b.v4.mcmc.txt">
+			<parameter idref="lambda"/>
+			<parameter idref="mu"/>
+			<loglikelihood idref="pheno"/>
+			<parameter idref="ll."/>
+			<parameter idref="mulambda"/>
+			<loglikelihood idref="mu"/>
+			<loglikelihood idref="lambda"/>
+		</log>
+	</mcmc>
+    
+    <!-- R code for importance sampling estimate of posterior model probabilities (need to check)
+        a=read.delim("~/Documents/C++/gcat/private/lmm2b.mcmc.txt",as.is=T)
+        pp = sapply(match(paste0("ll.",0:9),colnames(a)),function(j) mean(0.1*exp(a[,j]-a[,3])))
+        #[1] 0.12859923 0.09747550 0.09747880 0.09747790 0.09741480 0.09747875 0.09167455 0.09746331 0.09747830 0.09745583
+        plot(0.1*exp(a[,6]-a[,3]))
+        # Bayes factor relative to worst model
+        pp[1]/pp[10]
+        # What about relative to a model with no foreground effect?
+        # Since there are only two, parameters, can look out for funny behaviour - is it numerically stable?
+        plot(a$lambda,a$loglike,col=rainbow(nrow(a))[rank(a$mu)])
+    -->
+</gcat>

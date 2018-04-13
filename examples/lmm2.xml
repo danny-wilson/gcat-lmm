@@ -1,0 +1,48 @@
+<?xml version="1.1"?>
+<!-- Bayesian LMM model -->
+<gcat xmlns="http://www.danielwilson.me.uk/gcat">
+	<libraries>
+		<library file="/Users/wilson/Documents/C++/gcat/private/libgcat_lmm.so"/>
+	</libraries>
+	
+	<data>
+<!--    <continuous_vector_file id="pheno" distribution="pheno~" file="/Volumes/platypus/dipro/mmm/gorm/v2/ana/Saur/AbxGWAS/der.cipro.txt"/>
+		<continuous_matrix_file id="geno" file="/Volumes/platypus/dipro/mmm/gorm/v2/ana/Saur/AbxGWAS/der.geno.gcatlmm.txt"/> -->
+        <continuous_vector_file id="pheno" distribution="pheno~" file="/Users/wilson/Downloads/der.cipro.txt"/>
+		<continuous_matrix_file id="geno" file="/Users/wilson/Downloads/der.geno.gcatlmm.txt"/>
+	</data>
+	
+	<parameters>
+		<continuous_scalar id="lambda" distribution="lambda~" value="1.0"/>
+	</parameters>
+	
+	<transformations>
+        <!-- Process the genotypes -->
+		<compute_kinship_matrix id="K" bip="geno"/>
+
+        <!-- Construct covariance matrix -->
+		<rescale_symmetric_matrix_transform id="Sigma_A" scalar="lambda" matrix="K"/>
+        <to_diagonal_matrix id="Sigma_E" x="1.0" length="pheno"/>
+		<symmetric_matrix_sum_transform id="Sigma">
+            Sigma_A Sigma_E
+		</symmetric_matrix_sum_transform>
+
+	</transformations>
+    
+	<distributions>
+		<!-- Priors -->
+		<uniform_distribution id="lambda~" min="0.00001" max="100000"/>
+        
+		<!-- Likelihood -->
+		<marginal_normal_distribution id="pheno~" length="pheno" cov="Sigma"/>
+	</distributions>
+	
+	<mcmc niter="20000" seed="-1255892792" screen_update="1">
+		<log_uniform_proposal parameter="lambda" half-width="1" weight="1"/>
+		
+		<log burnin="20" thinning="1" file="lmm.mcmc.txt">
+			<parameter idref="lambda"/>
+			<loglikelihood idref="pheno"/>
+		</log>
+	</mcmc>
+</gcat>

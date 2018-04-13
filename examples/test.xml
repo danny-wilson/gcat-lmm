@@ -1,0 +1,75 @@
+<?xml version="1.1"?>
+<gcat xmlns="http://www.danielwilson.me.uk/gcat">
+	<libraries>
+		<library file="/Users/wilson/Documents/C++/gcat/private/libgcat_lmm.so"/>
+	</libraries>
+	
+	<data>
+		<continuous_matrix_file id="bip" file="/Users/wilson/Documents/C++/gcat/private/examples/mat.txt"/>
+		<continuous_vector id="LT">
+			1 0 1 0 0 1 0 0 0 1 0 0 0 0 1 0 0 0 0 0 1 0 0 0 0 0 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0
+			0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0
+			0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0
+			0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+			0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0
+			0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1
+		</continuous_vector>
+		<continuous_vector id="Y" distribution="Y~">
+			-0.68109662 -1.86315639 -0.36520920 -1.34253643 -0.90068180 -0.71629433 -1.13213888 -0.82537907 -1.77915208 -5.87936360 -4.68036776 -2.48152183 -3.26525449 -4.24755039
+			-1.16535082 -2.49514939 -3.24864938 -3.34840736 -0.14399954 -2.83951780 -0.07706030 -0.49269501 -1.54011281 -2.40843062 -4.97913911 -3.01102505 -3.75886756 -0.20660744
+			-1.84356892 -0.07712514
+		</continuous_vector>
+		<iid_continuous_scalar id="Y2" distribution="Y2~">
+			-0.68109662 -1.86315639 -0.36520920 -1.34253643 -0.90068180 -0.71629433 -1.13213888 -0.82537907 -1.77915208 -5.87936360 -4.68036776 -2.48152183 -3.26525449 -4.24755039
+			-1.16535082 -2.49514939 -3.24864938 -3.34840736 -0.14399954 -2.83951780 -0.07706030 -0.49269501 -1.54011281 -2.40843062 -4.97913911 -3.01102505 -3.75886756 -0.20660744
+			-1.84356892 -0.07712514
+		</iid_continuous_scalar>
+<!--		<continuous_vector_file id="Y" distribution="Y~" file="/Users/wilson/Documents/C++/gcat/private/examples/vec.txt"/>
+-->
+		<continuous_vector id="mu">
+			1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1 1
+		</continuous_vector>
+	</data>
+	
+	<parameters>
+		<continuous_scalar id="X" distribution="X~" value="1.0"/>	
+		<continuous_scalar id="S" distribution="S~" value="1.0"/>
+		<continuous_scalar id="X2" distribution="X~" value="1.0"/>	
+		<continuous_scalar id="S2" distribution="S~" value="1.0"/>
+	</parameters>
+	
+	<transformations>
+		<power_transform id="V" base="S" exponent="2"/>
+		<to_symmetric_matrix id="Sigma" x="LT"/>
+		<rescale_vector_transform id="mu2" scalar="X" vector="mu"/>
+<!--		<rescale_symmetric_matrix_transform id="Sigma2" scalar="V" matrix="Sigma"/> -->
+		<compute_kinship_matrix id="kin" bip="bip"/>
+		<rescale_symmetric_matrix_transform id="Sigma2" scalar="V" matrix="kin"/>
+	</transformations>
+    
+	<distributions>
+		<!-- Priors -->
+		<improper_uniform_distribution id="X~"/>
+		<improper_log_uniform_distribution id="S~"/>
+		<!-- Likelihood -->
+		<multivariate_normal_distribution id="Y~" length="Y" mean="mu2" cov="Sigma2"/>
+		<normal_distribution id="Y2~" mean="X2" sd="S2"/>
+	</distributions>
+	
+	<mcmc niter="20000" seed="-1255892792" screen_update="1">
+		<uniform_proposal parameter="X" half-width="1.0" weight="1"/>
+		<log_uniform_proposal parameter="S" half-width="1.0" weight="1"/>
+		<uniform_proposal parameter="X2" half-width="1.0" weight="1"/>
+		<log_uniform_proposal parameter="S2" half-width="1.0" weight="1"/>
+		
+		<log burnin="0" thinning="20" file="test.mcmc.txt">
+			<parameter idref="X"/>
+			<parameter idref="S"/>
+			<parameter idref="X2"/>
+			<parameter idref="S2"/>
+<!--			<parameter idref="Sigma"/> -->
+			<loglikelihood idref="Y"/>
+		<!--	<loglikelihood idref="Y2"/> -->
+		</log>
+	</mcmc>
+</gcat>

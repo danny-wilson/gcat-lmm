@@ -1,0 +1,61 @@
+<?xml version="1.1"?>
+<!-- Bayesian LMM model -->
+<gcat xmlns="http://www.danielwilson.me.uk/gcat">
+	<libraries>
+		<library file="/Users/wilson/Documents/C++/gcat/private/libgcat_lmm.so"/>
+	</libraries>
+	
+	<data>
+<!--    <continuous_vector_file id="pheno" distribution="pheno~" file="/Volumes/platypus/dipro/mmm/gorm/v2/ana/Saur/AbxGWAS/der.cipro.txt"/>
+		<continuous_matrix_file id="geno" file="/Volumes/platypus/dipro/mmm/gorm/v2/ana/Saur/AbxGWAS/der.geno.gcatlmm.txt"/> -->
+        <continuous_vector_file id="pheno" distribution="pheno~" file="/Users/wilson/Downloads/der.cipro.txt"/>
+		<continuous_matrix_file id="geno" file="/Users/wilson/Downloads/der.geno2.gcatlmm.txt"/>
+	</data>
+	
+	<parameters>
+		<!-- <continuous_scalar id="m" distribution="m~" value="0.0"/> -->
+		<continuous_scalar id="ssq_A" distribution="ssq_A~" value="1.0"/>
+		<continuous_scalar id="ssq_E" distribution="ssq_E~" value="1.0"/>
+	</parameters>
+	
+	<transformations>
+        <!-- Process the genotypes -->
+		<compute_kinship_matrix id="K" bip="geno"/>
+
+        <!-- Construct covariance matrix -->
+		<rescale_symmetric_matrix_transform id="Sigma_A" scalar="ssq_A" matrix="K"/>
+        <to_diagonal_matrix id="Sigma_E" x="ssq_E" length="pheno"/>
+		<symmetric_matrix_sum_transform id="Sigma">
+            Sigma_A Sigma_E
+		</symmetric_matrix_sum_transform>
+
+		<!-- Mean phenotype -->
+		<mean id="m" x="pheno"/>
+		<!-- Construct mean vector -->
+        <to_continuous_vector id="Mu" x="m" length="pheno"/>        
+	</transformations>
+    
+	<distributions>
+		<!-- Priors -->
+	<!--	<improper_uniform_distribution id="m~"/> -->
+		<improper_log_uniform_distribution id="ssq_A~"/>
+		<improper_log_uniform_distribution id="ssq_E~"/>
+        
+		<!-- Likelihood -->
+		<multivariate_normal_distribution id="pheno~" length="pheno" mean="Mu" cov="Sigma"/>
+	</distributions>
+	
+	<mcmc niter="20000" seed="-1255892792" screen_update="1">
+<!--	<mcmc niter="400" seed="-1255892792" screen_update="1">-->
+<!--	<uniform_proposal parameter="m" half-width="0.5" weight="1"/> -->
+		<log_uniform_proposal parameter="ssq_A" half-width="0.5" weight="1"/>
+		<log_uniform_proposal parameter="ssq_E" half-width="0.5" weight="1"/>
+		
+		<log burnin="0" thinning="20" file="lmm.mcmc.txt">
+			<parameter idref="m"/>
+			<parameter idref="ssq_A"/>
+			<parameter idref="ssq_E"/>
+			<loglikelihood idref="pheno"/>
+		</log>
+	</mcmc>
+</gcat>
