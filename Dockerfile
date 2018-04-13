@@ -1,4 +1,4 @@
-FROM danny-wilson/gcat-project
+FROM dannywilson/gcat-project
 LABEL app="GCAT with LMM library"
 LABEL description="General computational analysis tool with linear mixed model library"
 LABEL maintainer="Daniel Wilson"
